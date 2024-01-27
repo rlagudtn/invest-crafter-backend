@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/home")
-public class HomeApiController {
+public class StockApiController {
 
     @GetMapping(value = "")
     public ResponseEntity readKeyIndicators() {
