@@ -15,7 +15,7 @@ public class KeyIndicator extends BaseEntity {
     @Column(name = "key_indicator_id")
     private Long id;
 
-    private Short calendarYear;
+    private String calendarYear;
     private Float peg;
     private Float debtRatio;
 
