@@ -1,12 +1,9 @@
 package soo.investcrafter.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
-@Entity
-
+//@Entity
+//@Table(name = "cash_flow_statement")
 public class CashFlowStatement {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
