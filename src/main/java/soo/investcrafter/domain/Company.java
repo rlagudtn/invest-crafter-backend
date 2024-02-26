@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Table(name = "company")
@@ -29,4 +31,7 @@ public class Company extends BaseEntity {
 
     @Column(length = 64)
     private String country;
+
+    @OneToMany(mappedBy = "company")
+    private List<KeyIndicator> keyIndicators;
 }

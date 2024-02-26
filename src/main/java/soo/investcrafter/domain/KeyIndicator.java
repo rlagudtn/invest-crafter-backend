@@ -37,5 +37,10 @@ public class KeyIndicator extends BaseEntity {
     private Long investingActivitiesCashFlow;
     private Long financingActivitiesCashFlow;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "company_id")
+    private Company company;
+
+
 }
 
