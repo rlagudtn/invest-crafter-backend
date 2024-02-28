@@ -1,6 +1,8 @@
 package soo.investcrafter.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import soo.investcrafter.domain.Company;
 import soo.investcrafter.dto.CompanyDto;
@@ -19,6 +21,13 @@ public class CompanyService {
         List<Company> companies = companyRepository.findAllCompaniesWithLatestKeyIndicator();
         return companies.stream().map(company -> new CompanyDto(company, company.getKeyIndicators().get(0)))
                 .collect(Collectors.toList());
+    }
+
+    public Page<CompanyDto> getCompanyWithLatestKeyIndicator(Pageable pageable) {
+        Page<Company> companies = companyRepository.findAllCompaniesWithLatestKeyIndicator(pageable);
+        return companies.map(company -> new CompanyDto(company,
+                company.getKeyIndicators().isEmpty() ? null : company.getKeyIndicators().get(0)));
+
     }
 
 
