@@ -1,4 +1,4 @@
-# invest-crafter-backend
+# invest-crafter-backend(진행중)
 미국 주식 투자의 집중 투자를 위한 핵심 지표 제공 사이트
 
 ### 서비스 소개
