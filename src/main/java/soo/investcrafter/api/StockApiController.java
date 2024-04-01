@@ -25,7 +25,7 @@ public class StockApiController {
     private final CompanyService companyService;
 
     @GetMapping(value = "")
-    public ResponseEntity readAllStocks(@PageableDefault(size = 10,direction = Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity readCompaniesWithIndicators(@PageableDefault(size = 10,direction = Sort.Direction.DESC) Pageable pageable) {
         try {
             log.info("pageable>>> {}",pageable.toString());
             Page<CompanyDto> companies = companyService.getCompanyWithLatestKeyIndicator(pageable);
