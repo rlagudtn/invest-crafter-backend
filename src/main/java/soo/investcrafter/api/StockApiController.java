@@ -1,6 +1,7 @@
 package soo.investcrafter.api;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -18,6 +19,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/stocks")
+@Slf4j
 @RequiredArgsConstructor
 public class StockApiController {
     private final CompanyService companyService;
@@ -25,6 +27,7 @@ public class StockApiController {
     @GetMapping(value = "")
     public ResponseEntity readAllStocks(@PageableDefault(size = 10,direction = Sort.Direction.DESC) Pageable pageable) {
         try {
+            log.info("pageable>>> {}",pageable.toString());
             Page<CompanyDto> companies = companyService.getCompanyWithLatestKeyIndicator(pageable);
             // 데이터 로직 처리
             return ResponseEntity.ok(JSendResponse.success(companies));
