@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import soo.investcrafter.dto.CompanyDto;
 import soo.investcrafter.dto.JSendResponse;
+import soo.investcrafter.dto.SearchCriteriaDto;
 import soo.investcrafter.service.CompanyService;
 
 import java.util.HashMap;
@@ -25,10 +26,15 @@ public class StockApiController {
     private final CompanyService companyService;
 
     @GetMapping(value = "")
-    public ResponseEntity readCompaniesWithIndicators(@PageableDefault(size = 10,direction = Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity readCompaniesWithIndicators(
+            @PageableDefault(size = 10,direction = Sort.Direction.DESC) Pageable pageable,
+            SearchCriteriaDto searchCriteria
+            ) {
         try {
             log.info("pageable>>> {}",pageable.toString());
-            Page<CompanyDto> companies = companyService.getCompanyWithLatestKeyIndicator(pageable);
+            log.info("searchCriteria>>> {}", searchCriteria.toString());
+
+            Page<CompanyDto> companies = companyService.getCompanyWithLatestKeyIndicator(pageable,searchCriteria);
             // 데이터 로직 처리
             return ResponseEntity.ok(JSendResponse.success(companies));
         } catch (Exception e) {

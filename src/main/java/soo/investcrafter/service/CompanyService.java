@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import soo.investcrafter.domain.Company;
 import soo.investcrafter.dto.CompanyDto;
+import soo.investcrafter.dto.SearchCriteriaDto;
 import soo.investcrafter.repository.CompanyRepository;
 
 import java.util.List;
@@ -23,8 +24,8 @@ public class CompanyService {
                 .collect(Collectors.toList());
     }
 
-    public Page<CompanyDto> getCompanyWithLatestKeyIndicator(Pageable pageable) {
-        Page<Company> companies = companyRepository.findAllCompaniesWithLatestKeyIndicator(pageable);
+    public Page<CompanyDto> getCompanyWithLatestKeyIndicator(Pageable pageable, SearchCriteriaDto searchCriteria) {
+        Page<Company> companies = companyRepository.findAllCompaniesWithLatestKeyIndicator(pageable,searchCriteria);
         return companies.map(company -> new CompanyDto(company,
                 company.getKeyIndicators().isEmpty() ? null : company.getKeyIndicators().get(0)));
 

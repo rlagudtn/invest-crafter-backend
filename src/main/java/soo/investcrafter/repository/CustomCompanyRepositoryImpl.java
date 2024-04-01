@@ -1,6 +1,7 @@
 package soo.investcrafter.repository;
 
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -16,6 +17,7 @@ import org.springframework.data.support.PageableExecutionUtils;
 import soo.investcrafter.domain.Company;
 import soo.investcrafter.domain.QCompany;
 import soo.investcrafter.domain.QKeyIndicator;
+import soo.investcrafter.dto.SearchCriteriaDto;
 
 import java.util.List;
 
@@ -33,17 +35,16 @@ public class CustomCompanyRepositoryImpl implements CustomCompanyRepository {
         List<Company> companies = queryFactory.selectFrom(company)
                 .innerJoin(company.keyIndicators, keyIndicator)
                 .fetchJoin().fetch();
-        System.out.println("length >>>");
-        System.out.println(companies.size());
         return companies;
 
     }
 
     @Override
-    public Page<Company> findAllCompaniesWithLatestKeyIndicator(Pageable pageable) {
+    public Page<Company> findAllCompaniesWithLatestKeyIndicator(Pageable pageable, SearchCriteriaDto searchCriteria) {
         JPAQuery<Company> query = queryFactory.selectFrom(company)
                 .innerJoin(company.keyIndicators, keyIndicator)
                 .fetchJoin()
+                .where(buildWhereClause(searchCriteria))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize());
 
@@ -64,4 +65,174 @@ public class CustomCompanyRepositoryImpl implements CustomCompanyRepository {
 
         return new PageImpl<>(content, pageable,count);
     }
+
+
+    // 모든 조건을 조합하는 메소드
+    private BooleanExpression buildWhereClause(SearchCriteriaDto criteria) {
+        return allOf(
+                minPegGoe(criteria.getMinPeg()),
+                maxPegLoe(criteria.getMaxPeg()),
+                minDebtRatioGoe(criteria.getMinDebtRatio()),
+                maxDebtRatioLoe(criteria.getMaxDebtRatio()),
+                minRoeRecent1yrGoe(criteria.getMinRoeRecent1yr()),
+                maxRoeRecent1yrLoe(criteria.getMaxRoeRecent1yr()),
+                minRoeRecent2yrGoe(criteria.getMinRoeRecent2yr()),
+                maxRoeRecent2yrLoe(criteria.getMaxRoeRecent2yr()),
+                minRoeRecent3yrGoe(criteria.getMinRoeRecent3yr()),
+                maxRoeRecent3yrLoe(criteria.getMaxRoeRecent3yr()),
+                minOpmRecent1yrGoe(criteria.getMinOpmRecent1yr()),
+                maxOpmRecent1yrLoe(criteria.getMaxOpmRecent1yr()),
+                minOpmRecent2yrGoe(criteria.getMinOpmRecent2yr()),
+                maxOpmRecent2yrLoe(criteria.getMaxOpmRecent2yr()),
+                minOpmRecent3yrGoe(criteria.getMinOpmRecent3yr()),
+                maxOpmRecent3yrLoe(criteria.getMaxOpmRecent3yr()),
+                minFreeCashFlowGoe(criteria.getMinFreeCashFlow()),
+                maxFreeCashFlowLoe(criteria.getMaxFreeCashFlow()),
+                minDividendYieldGoe(criteria.getMinDividendYield()),
+                maxDividendYieldLoe(criteria.getMaxDividendYield()),
+                minPbrGoe(criteria.getMinPbr()),
+                maxPbrLoe(criteria.getMaxPbr()),
+                minPerGoe(criteria.getMinPer()),
+                maxPerLoe(criteria.getMaxPer()),
+                minOperatingActivitiesCashFlowGoe(criteria.getMinOperatingActivitiesCashFlow()),
+                maxOperatingActivitiesCashFlowLoe(criteria.getMaxOperatingActivitiesCashFlow()),
+                minInvestingActivitiesCashFlowGoe(criteria.getMinInvestingActivitiesCashFlow()),
+                maxInvestingActivitiesCashFlowLoe(criteria.getMaxInvestingActivitiesCashFlow()),
+                minFinancingActivitiesCashFlowGoe(criteria.getMinFinancingActivitiesCashFlow()),
+                maxFinancingActivitiesCashFlowLoe(criteria.getMaxFinancingActivitiesCashFlow())
+        );
+    }
+
+    // 여러 BooleanExpression 조건들을 AND 연산으로 결합
+    private BooleanExpression allOf(BooleanExpression... expressions) {
+        BooleanExpression result = null;
+        for (BooleanExpression expression : expressions) {
+            result = result == null ? expression : result.and(expression);
+        }
+        return result;
+    }
+
+
+    // 기타 필요한 필드나 메소드
+    private BooleanExpression minPegGoe(Float minPeg) {
+        return minPeg != null ? keyIndicator.peg.goe(minPeg) : null;
+    }
+
+    private BooleanExpression maxPegLoe(Float maxPeg) {
+        return maxPeg != null ? keyIndicator.peg.loe(maxPeg) : null;
+    }
+
+    private BooleanExpression minDebtRatioGoe(Float minDebtRatio) {
+        return minDebtRatio != null ? keyIndicator.debtRatio.goe(minDebtRatio) : null;
+    }
+    private BooleanExpression maxDebtRatioLoe(Float maxDebtRatio) {
+        return maxDebtRatio != null ? keyIndicator.debtRatio.loe(maxDebtRatio) : null;
+    }
+
+    private BooleanExpression minRoeRecent1yrGoe(Float minRoeRecent1yr) {
+        return minRoeRecent1yr != null ? keyIndicator.roeRecent1yr.goe(minRoeRecent1yr) : null;
+    }
+
+    private BooleanExpression maxRoeRecent1yrLoe(Float maxRoeRecent1yr) {
+        return maxRoeRecent1yr != null ? keyIndicator.roeRecent1yr.loe(maxRoeRecent1yr) : null;
+    }
+
+    private BooleanExpression minRoeRecent2yrGoe(Float minRoeRecent2yr) {
+        return minRoeRecent2yr != null ? keyIndicator.roeRecent2yr.goe(minRoeRecent2yr) : null;
+    }
+
+    private BooleanExpression maxRoeRecent2yrLoe(Float maxRoeRecent2yr) {
+        return maxRoeRecent2yr != null ? keyIndicator.roeRecent2yr.loe(maxRoeRecent2yr) : null;
+    }
+
+    private BooleanExpression minRoeRecent3yrGoe(Float minRoeRecent3yr) {
+        return minRoeRecent3yr != null ? keyIndicator.roeRecent3yr.goe(minRoeRecent3yr) : null;
+    }
+
+    private BooleanExpression maxRoeRecent3yrLoe(Float maxRoeRecent3yr) {
+        return maxRoeRecent3yr != null ? keyIndicator.roeRecent3yr.loe(maxRoeRecent3yr) : null;
+    }
+
+    private BooleanExpression minOpmRecent1yrGoe(Float minOpmRecent1yr) {
+        return minOpmRecent1yr != null ? keyIndicator.opmRecent1yr.goe(minOpmRecent1yr) : null;
+    }
+
+    private BooleanExpression maxOpmRecent1yrLoe(Float maxOpmRecent1yr) {
+        return maxOpmRecent1yr != null ? keyIndicator.opmRecent1yr.loe(maxOpmRecent1yr) : null;
+    }
+
+    private BooleanExpression minOpmRecent2yrGoe(Float minOpmRecent2yr) {
+        return minOpmRecent2yr != null ? keyIndicator.opmRecent2yr.goe(minOpmRecent2yr) : null;
+    }
+
+    private BooleanExpression maxOpmRecent2yrLoe(Float maxOpmRecent2yr) {
+        return maxOpmRecent2yr != null ? keyIndicator.opmRecent2yr.loe(maxOpmRecent2yr) : null;
+    }
+
+    private BooleanExpression minOpmRecent3yrGoe(Float minOpmRecent3yr) {
+        return minOpmRecent3yr != null ? keyIndicator.opmRecent3yr.goe(minOpmRecent3yr) : null;
+    }
+
+    private BooleanExpression maxOpmRecent3yrLoe(Float maxOpmRecent3yr) {
+        return maxOpmRecent3yr != null ? keyIndicator.opmRecent3yr.loe(maxOpmRecent3yr) : null;
+    }
+
+    private BooleanExpression minFreeCashFlowGoe(Long minFreeCashFlow) {
+        return minFreeCashFlow != null ? keyIndicator.freeCashFlow.goe(minFreeCashFlow) : null;
+    }
+
+    private BooleanExpression maxFreeCashFlowLoe(Long maxFreeCashFlow) {
+        return maxFreeCashFlow != null ? keyIndicator.freeCashFlow.loe(maxFreeCashFlow) : null;
+    }
+
+    private BooleanExpression minDividendYieldGoe(Float minDividendYield) {
+        return minDividendYield != null ? keyIndicator.dividendYield.goe(minDividendYield) : null;
+    }
+
+    private BooleanExpression maxDividendYieldLoe(Float maxDividendYield) {
+        return maxDividendYield != null ? keyIndicator.dividendYield.loe(maxDividendYield) : null;
+    }
+
+    private BooleanExpression minPbrGoe(Float minPbr) {
+        return minPbr != null ? keyIndicator.pbr.goe(minPbr) : null;
+    }
+
+    private BooleanExpression maxPbrLoe(Float maxPbr) {
+        return maxPbr != null ? keyIndicator.pbr.loe(maxPbr) : null;
+    }
+
+    private BooleanExpression minPerGoe(Float minPer) {
+        return minPer != null ? keyIndicator.per.goe(minPer) : null;
+    }
+
+    private BooleanExpression maxPerLoe(Float maxPer) {
+        return maxPer != null ? keyIndicator.per.loe(maxPer) : null;
+    }
+
+    private BooleanExpression minOperatingActivitiesCashFlowGoe(Long minOperatingActivitiesCashFlow) {
+        return minOperatingActivitiesCashFlow != null ? keyIndicator.operatingActivitiesCashFlow.goe(minOperatingActivitiesCashFlow) : null;
+    }
+
+    private BooleanExpression maxOperatingActivitiesCashFlowLoe(Long maxOperatingActivitiesCashFlow) {
+        return maxOperatingActivitiesCashFlow != null ? keyIndicator.operatingActivitiesCashFlow.loe(maxOperatingActivitiesCashFlow) : null;
+    }
+
+    private BooleanExpression minInvestingActivitiesCashFlowGoe(Long minInvestingActivitiesCashFlow) {
+        return minInvestingActivitiesCashFlow != null ? keyIndicator.investingActivitiesCashFlow.goe(minInvestingActivitiesCashFlow) : null;
+    }
+
+    private BooleanExpression maxInvestingActivitiesCashFlowLoe(Long maxInvestingActivitiesCashFlow) {
+        return maxInvestingActivitiesCashFlow != null ? keyIndicator.investingActivitiesCashFlow.loe(maxInvestingActivitiesCashFlow) : null;
+    }
+
+    private BooleanExpression minFinancingActivitiesCashFlowGoe(Long minFinancingActivitiesCashFlow) {
+        return minFinancingActivitiesCashFlow != null ? keyIndicator.financingActivitiesCashFlow.goe(minFinancingActivitiesCashFlow) : null;
+    }
+
+    private BooleanExpression maxFinancingActivitiesCashFlowLoe(Long maxFinancingActivitiesCashFlow) {
+        return maxFinancingActivitiesCashFlow != null ? keyIndicator.financingActivitiesCashFlow.loe(maxFinancingActivitiesCashFlow) : null;
+    }
+
+
+
 }
