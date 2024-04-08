@@ -32,4 +32,7 @@ public class CompanyService {
     }
 
 
+    public List<CompanyDto> searchCompaniesByKeyword(String keyword, Pageable pageable) {
+        return null;
+    }
 }

@@ -44,6 +44,18 @@ public class StockApiController {
         }
     }
 
+    @GetMapping
+    public ResponseEntity searchCompaniesByKeyword(
+            @RequestParam String keyword,
+            @PageableDefault(size = 10, direction = Sort.Direction.ASC) Pageable pageable) {
+        try {
+            List<CompanyDto> searchedCompanies= companyService.searchCompaniesByKeyword(keyword, pageable);
+            return ResponseEntity.ok(JSendResponse.success(searchedCompanies));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(JSendResponse.error("error"));
+        }
+
+    }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity readStockById(@PathVariable Long id) {
