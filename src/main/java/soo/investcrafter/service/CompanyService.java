@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import soo.investcrafter.domain.Company;
 import soo.investcrafter.dto.CompanyDto;
+import soo.investcrafter.dto.CompanyWithStatementsDto;
 import soo.investcrafter.dto.SearchCriteriaDto;
 import soo.investcrafter.repository.CompanyRepository;
 
@@ -37,5 +38,9 @@ public class CompanyService {
 
         return searchedCompanies.map(company -> new CompanyDto(company,
                 company.getKeyIndicators().isEmpty() ? null : company.getKeyIndicators().get(0)));
+    }
+
+    public CompanyWithStatementsDto getCompanyWithStatements(Long id) {
+        return null;
     }
 }

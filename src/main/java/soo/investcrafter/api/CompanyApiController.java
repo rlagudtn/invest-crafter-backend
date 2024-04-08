@@ -9,6 +9,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import soo.investcrafter.dto.CompanyDto;
+import soo.investcrafter.dto.CompanyWithStatementsDto;
 import soo.investcrafter.dto.JSendResponse;
 import soo.investcrafter.dto.SearchCriteriaDto;
 import soo.investcrafter.service.CompanyService;
@@ -22,19 +23,18 @@ public class CompanyApiController {
 
     @GetMapping(value = "")
     public ResponseEntity readCompaniesWithIndicators(
-            @PageableDefault(size = 10,direction = Sort.Direction.DESC) Pageable pageable,
-            SearchCriteriaDto searchCriteria
+            SearchCriteriaDto searchCriteria,
+            @PageableDefault(size = 10,direction = Sort.Direction.DESC) Pageable pageable
             ) {
         try {
-            log.info("pageable>>> {}",pageable.toString());
-            log.info("searchCriteria>>> {}", searchCriteria.toString());
+            log.info("searchCriteria >>> {}", searchCriteria.toString());
 
             Page<CompanyDto> companies = companyService.getCompanyWithLatestKeyIndicator(pageable,searchCriteria);
             // 데이터 로직 처리
             return ResponseEntity.ok(JSendResponse.success(companies));
         } catch (Exception e) {
             // 예외 처리 및 에러 응답 반환
-            return ResponseEntity.badRequest().body(JSendResponse.error("error"));
+            return ResponseEntity.badRequest().body(JSendResponse.error(e.toString()));
 
         }
     }
@@ -49,14 +49,20 @@ public class CompanyApiController {
 
             return ResponseEntity.ok(JSendResponse.success(searchedCompanies));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(JSendResponse.error("error"));
+            return ResponseEntity.badRequest().body(JSendResponse.error(e.toString()));
         }
 
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity readStockById(@PathVariable Long id) {
-        return null;
+    public ResponseEntity readCompanyById(@PathVariable(value = "id") Long id) {
+        try{
+            CompanyWithStatementsDto companyDto = companyService.getCompanyWithStatements(id);
+            return ResponseEntity.ok(JSendResponse.success(companyDto));
+        }
+        catch (Exception e){
+            return ResponseEntity.badRequest().body(JSendResponse.error(e.toString()));
+        }
     }
 
     @PostMapping(value="/bookmarks/{id}")

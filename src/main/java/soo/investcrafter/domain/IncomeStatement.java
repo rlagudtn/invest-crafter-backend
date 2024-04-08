@@ -1,10 +1,12 @@
 package soo.investcrafter.domain;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 
 @Entity
 @Table(name = "income_statement")
+@Getter
 public class IncomeStatement {
 
     @Id

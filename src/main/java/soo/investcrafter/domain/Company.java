@@ -5,6 +5,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
+import soo.investcrafter.dto.CashFlowStatementDto;
+import soo.investcrafter.dto.IncomeStatementDto;
 
 import java.util.List;
 
@@ -34,4 +36,14 @@ public class Company extends BaseEntity {
 
     @OneToMany(mappedBy = "company")
     private List<KeyIndicator> keyIndicators;
+
+    @OneToMany(mappedBy = "company")
+    private List<BalanceSheet> balanceSheets;
+
+    @OneToMany(mappedBy = "company")
+    private List<IncomeStatement> incomeStatements;
+
+    @OneToMany(mappedBy = "company")
+    private List<CashFlowStatement> cashFlowStatements;
+
 }
