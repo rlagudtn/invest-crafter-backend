@@ -6,7 +6,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import soo.investcrafter.dto.CompanyDto;
@@ -14,15 +13,11 @@ import soo.investcrafter.dto.JSendResponse;
 import soo.investcrafter.dto.SearchCriteriaDto;
 import soo.investcrafter.service.CompanyService;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 @RestController
 @RequestMapping(value = "/stocks")
 @Slf4j
 @RequiredArgsConstructor
-public class StockApiController {
+public class CompanyApiController {
     private final CompanyService companyService;
 
     @GetMapping(value = "")
@@ -51,12 +46,9 @@ public class StockApiController {
         try {
             log.info("keyword >>> {}",keyword);
             Page<CompanyDto> searchedCompanies= companyService.searchCompaniesByKeyword(keyword, pageable);
-            log.info("searched dtos >>> {}",searchedCompanies);
 
             return ResponseEntity.ok(JSendResponse.success(searchedCompanies));
         } catch (Exception e) {
-            log.error("error >>> {}",e.toString());
-
             return ResponseEntity.badRequest().body(JSendResponse.error("error"));
         }
 
