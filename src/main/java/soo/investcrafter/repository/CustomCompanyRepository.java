@@ -13,4 +13,6 @@ public interface CustomCompanyRepository {
     List<Company> findAllCompaniesWithLatestKeyIndicator();
 
     Page<Company> findAllCompaniesWithLatestKeyIndicator(Pageable pageable, SearchCriteriaDto searchCriteriaDto);
+
+    Page<Company> findCompaniesWithLKeyIndicatorByKeyword(String keyword, Pageable pageable);
 }

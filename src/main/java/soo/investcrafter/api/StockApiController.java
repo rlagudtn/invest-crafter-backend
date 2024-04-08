@@ -44,14 +44,19 @@ public class StockApiController {
         }
     }
 
-    @GetMapping
+    @GetMapping(value = "",params = {"keyword"})
     public ResponseEntity searchCompaniesByKeyword(
-            @RequestParam String keyword,
+            @RequestParam(value = "keyword") String keyword,
             @PageableDefault(size = 10, direction = Sort.Direction.ASC) Pageable pageable) {
         try {
-            List<CompanyDto> searchedCompanies= companyService.searchCompaniesByKeyword(keyword, pageable);
+            log.info("keyword >>> {}",keyword);
+            Page<CompanyDto> searchedCompanies= companyService.searchCompaniesByKeyword(keyword, pageable);
+            log.info("searched dtos >>> {}",searchedCompanies);
+
             return ResponseEntity.ok(JSendResponse.success(searchedCompanies));
         } catch (Exception e) {
+            log.error("error >>> {}",e.toString());
+
             return ResponseEntity.badRequest().body(JSendResponse.error("error"));
         }
 

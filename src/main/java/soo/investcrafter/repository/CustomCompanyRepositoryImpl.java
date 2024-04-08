@@ -56,6 +56,7 @@ public class CustomCompanyRepositoryImpl implements CustomCompanyRepository {
                     entityPath.get(order.getProperty())));
         }
         List<Company> content = query.fetch();
+
         Long count = queryFactory
                 .select(company.count())
                 .from(company)
@@ -64,6 +65,27 @@ public class CustomCompanyRepositoryImpl implements CustomCompanyRepository {
                 .fetchCount();
 
         return new PageImpl<>(content, pageable,count);
+    }
+
+    @Override
+    public Page<Company> findCompaniesWithLKeyIndicatorByKeyword(String keyword, Pageable pageable) {
+
+        JPAQuery<Company> query = queryFactory.selectFrom(company)
+                .innerJoin(company.keyIndicators, keyIndicator)
+                .where(company.name.contains(keyword).or(company.symbol.contains(keyword)))
+                .fetchJoin()
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize());
+
+        List<Company> fetchedCompanies = query.fetch();
+        Long count = queryFactory
+                .select(company.count())
+                .from(company)
+                .innerJoin(company.keyIndicators, keyIndicator)
+                .fetchJoin()
+                .fetchCount();
+
+        return new PageImpl<>(fetchedCompanies, pageable, count);
     }
 
 

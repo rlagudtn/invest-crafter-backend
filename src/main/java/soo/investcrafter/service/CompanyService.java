@@ -32,7 +32,10 @@ public class CompanyService {
     }
 
 
-    public List<CompanyDto> searchCompaniesByKeyword(String keyword, Pageable pageable) {
-        return null;
+    public Page<CompanyDto> searchCompaniesByKeyword(String keyword, Pageable pageable) {
+        Page<Company> searchedCompanies=companyRepository.findCompaniesWithLKeyIndicatorByKeyword(keyword,pageable);
+
+        return searchedCompanies.map(company -> new CompanyDto(company,
+                company.getKeyIndicators().isEmpty() ? null : company.getKeyIndicators().get(0)));
     }
 }

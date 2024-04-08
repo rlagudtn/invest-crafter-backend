@@ -26,7 +26,8 @@ public class CompanyDto {
 
     public CompanyDto(Company company, KeyIndicator keyIndicator) {
         this(company);
-        this.keyIndicator =new KeyIndicatorDto(keyIndicator);
+        if (keyIndicator !=null)
+            this.keyIndicator =new KeyIndicatorDto(keyIndicator);
     }
 
 }
