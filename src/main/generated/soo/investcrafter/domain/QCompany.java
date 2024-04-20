@@ -22,6 +22,10 @@ public class QCompany extends EntityPathBase<Company> {
 
     public final QBaseEntity _super = new QBaseEntity(this);
 
+    public final ListPath<BalanceSheet, QBalanceSheet> balanceSheets = this.<BalanceSheet, QBalanceSheet>createList("balanceSheets", BalanceSheet.class, QBalanceSheet.class, PathInits.DIRECT2);
+
+    public final ListPath<CashFlowStatement, QCashFlowStatement> cashFlowStatements = this.<CashFlowStatement, QCashFlowStatement>createList("cashFlowStatements", CashFlowStatement.class, QCashFlowStatement.class, PathInits.DIRECT2);
+
     public final StringPath country = createString("country");
 
     //inherited
@@ -30,6 +34,8 @@ public class QCompany extends EntityPathBase<Company> {
     public final StringPath exchange = createString("exchange");
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
+
+    public final ListPath<IncomeStatement, QIncomeStatement> incomeStatements = this.<IncomeStatement, QIncomeStatement>createList("incomeStatements", IncomeStatement.class, QIncomeStatement.class, PathInits.DIRECT2);
 
     public final StringPath industry = createString("industry");
 

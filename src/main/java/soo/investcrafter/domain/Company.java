@@ -46,4 +46,11 @@ public class Company extends BaseEntity {
     @OneToMany(mappedBy = "company")
     private List<CashFlowStatement> cashFlowStatements;
 
+    //재무제표 업데이트 함수
+    public void updateStatements(List<BalanceSheet> new_bs, List<IncomeStatement> new_income, List<CashFlowStatement> new_cf) {
+        this.balanceSheets = new_bs;
+        this.incomeStatements = new_income;
+        this.cashFlowStatements = new_cf;
+    }
+
 }

@@ -4,7 +4,7 @@ import lombok.Data;
 import soo.investcrafter.domain.Company;
 import soo.investcrafter.domain.KeyIndicator;
 
-@Data
+//@Data
 public class CompanyDto {
     private Long id;
     private String name;

@@ -58,6 +58,7 @@ public class CompanyApiController {
     public ResponseEntity readCompanyById(@PathVariable(value = "id") Long id) {
         try{
             CompanyWithStatementsDto companyDto = companyService.getCompanyWithStatements(id);
+            log.info("company with statements >>> {}",companyDto);
             return ResponseEntity.ok(JSendResponse.success(companyDto));
         }
         catch (Exception e){

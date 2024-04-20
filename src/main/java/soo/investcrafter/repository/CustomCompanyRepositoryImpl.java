@@ -14,14 +14,19 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.support.PageableExecutionUtils;
-import soo.investcrafter.domain.Company;
-import soo.investcrafter.domain.QCompany;
-import soo.investcrafter.domain.QKeyIndicator;
+import soo.investcrafter.domain.*;
 import soo.investcrafter.dto.SearchCriteriaDto;
 
+import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
+import static soo.investcrafter.domain.QBalanceSheet.balanceSheet;
+import static soo.investcrafter.domain.QCashFlowStatement.cashFlowStatement;
 import static soo.investcrafter.domain.QCompany.company;
+import static soo.investcrafter.domain.QIncomeStatement.incomeStatement;
 import static soo.investcrafter.domain.QKeyIndicator.keyIndicator;
 
 @RequiredArgsConstructor
@@ -35,6 +40,7 @@ public class CustomCompanyRepositoryImpl implements CustomCompanyRepository {
         List<Company> companies = queryFactory.selectFrom(company)
                 .innerJoin(company.keyIndicators, keyIndicator)
                 .fetchJoin().fetch();
+
         return companies;
 
     }
@@ -86,6 +92,43 @@ public class CustomCompanyRepositoryImpl implements CustomCompanyRepository {
                 .fetchCount();
 
         return new PageImpl<>(fetchedCompanies, pageable, count);
+    }
+
+    @Override
+    public Optional<Company> findCompanyWithStatementsById(Long id) {
+        int LATEST=3;
+        Integer currentYear = LocalDate.now().getYear();
+        Company found = queryFactory.selectFrom(company)
+                .leftJoin(company.balanceSheets, balanceSheet)
+                .leftJoin(company.incomeStatements, incomeStatement)
+                .leftJoin(company.cashFlowStatements, cashFlowStatement)
+                .where(company.id.eq(id))
+                .fetchJoin()
+                .fetchOne();
+
+        // 데이터가 로드된 후, 자바에서 필터링과 정렬을 진행
+        if (found != null) {
+            List<BalanceSheet> balanceSheets = found.getBalanceSheets().stream()
+                    .sorted(Comparator.comparing(BalanceSheet::getCalendarYear).reversed())
+                    .limit(LATEST)
+                    .collect(Collectors.toList());
+
+            List<IncomeStatement> incomeStatements = found.getIncomeStatements().stream()
+                    .sorted(Comparator.comparing(IncomeStatement::getCalendarYear).reversed())
+                    .limit(LATEST)
+
+                    .collect(Collectors.toList());
+
+            List<CashFlowStatement> cashFlowStatements = found.getCashFlowStatements().stream()
+                    .sorted(Comparator.comparing(CashFlowStatement::getCalendarYear).reversed())
+                    .limit(LATEST)
+                    .collect(Collectors.toList());
+
+            found.updateStatements(balanceSheets,incomeStatements,cashFlowStatements);
+        }
+        log.info("found >>> {}",found);
+
+        return Optional.ofNullable(found);
     }
 
 

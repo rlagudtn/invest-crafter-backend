@@ -7,6 +7,7 @@ import soo.investcrafter.domain.Company;
 import soo.investcrafter.dto.SearchCriteriaDto;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CustomCompanyRepository {
@@ -15,4 +16,6 @@ public interface CustomCompanyRepository {
     Page<Company> findAllCompaniesWithLatestKeyIndicator(Pageable pageable, SearchCriteriaDto searchCriteriaDto);
 
     Page<Company> findCompaniesWithLKeyIndicatorByKeyword(String keyword, Pageable pageable);
+
+    Optional<Company> findCompanyWithStatementsById(Long id);
 }

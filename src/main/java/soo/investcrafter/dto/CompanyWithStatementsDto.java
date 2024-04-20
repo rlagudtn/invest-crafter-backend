@@ -1,11 +1,14 @@
 package soo.investcrafter.dto;
 
+import lombok.Getter;
+import lombok.ToString;
 import soo.investcrafter.domain.Company;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-
+@Getter
+@ToString
 public class CompanyWithStatementsDto extends CompanyDto{
     private List<BalanceSheetDto> balanceSheets;
     private List<IncomeStatementDto> incomeStatements;

@@ -11,6 +11,7 @@ import soo.investcrafter.dto.SearchCriteriaDto;
 import soo.investcrafter.repository.CompanyRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,6 +42,8 @@ public class CompanyService {
     }
 
     public CompanyWithStatementsDto getCompanyWithStatements(Long id) {
-        return null;
+        Company company= companyRepository.findCompanyWithStatementsById(id).orElseThrow();
+
+        return new CompanyWithStatementsDto(company);
     }
 }
