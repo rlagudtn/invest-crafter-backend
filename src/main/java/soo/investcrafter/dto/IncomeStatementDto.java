@@ -7,7 +7,7 @@ import soo.investcrafter.domain.IncomeStatement;
 @Data
 @AllArgsConstructor
 public class IncomeStatementDto {
-    private Long incomeStatementId;
+    private Long id;
     private String calendarYear;
     private Long revenue;
     private Long researchAndDevelop;
@@ -18,7 +18,7 @@ public class IncomeStatementDto {
     private String url;
 
     public IncomeStatementDto(IncomeStatement incomeStatement) {
-        this.incomeStatementId = incomeStatement.getIncomeStatementId();
+        this.id = incomeStatement.getIncomeStatementId();
         this.calendarYear = incomeStatement.getCalendarYear();
         this.revenue = incomeStatement.getRevenue();
         this.researchAndDevelop = incomeStatement.getResearchAndDevelop();

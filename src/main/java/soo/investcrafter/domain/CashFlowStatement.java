@@ -11,7 +11,7 @@ public class CashFlowStatement {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "balance_sheet_id")
+    @Column(name = "cashflow_statement_id")
     private Long id;
 
     @Column(length = 8)
