@@ -14,6 +14,8 @@ import soo.investcrafter.dto.JSendResponse;
 import soo.investcrafter.dto.SearchCriteriaDto;
 import soo.investcrafter.service.CompanyService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/stocks")
 @Slf4j
@@ -21,6 +23,16 @@ import soo.investcrafter.service.CompanyService;
 public class CompanyApiController {
     private final CompanyService companyService;
 
+    @GetMapping(value = "/overviews")
+    public ResponseEntity readAllCompanyInfo() {
+        try{
+            List<CompanyDto> companies = companyService.getAllCompanies();
+            return ResponseEntity.ok(JSendResponse.success(companies));
+        }
+        catch (Exception e){
+            return ResponseEntity.badRequest().body(JSendResponse.error(e.toString()));
+        }
+    }
     @GetMapping(value = "")
     public ResponseEntity readCompaniesWithIndicators(
             SearchCriteriaDto searchCriteria,

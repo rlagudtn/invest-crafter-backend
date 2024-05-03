@@ -46,4 +46,9 @@ public class CompanyService {
 
         return new CompanyWithStatementsDto(company);
     }
+
+    public List<CompanyDto> getAllCompanies() {
+        List<Company> companies = companyRepository.findAll();
+        return companies.stream().map(company -> new CompanyDto(company)).collect(Collectors.toList());
+    }
 }
