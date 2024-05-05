@@ -56,7 +56,7 @@ public class CompanyApiController {
             @RequestParam(value = "keyword") String keyword,
             @PageableDefault(size = 10, direction = Sort.Direction.ASC) Pageable pageable) {
         try {
-            log.info("keyword >>> {}",keyword);
+            log.info("keyword >>> {},{}",keyword,pageable);
             Page<CompanyDto> searchedCompanies= companyService.searchCompaniesByKeyword(keyword, pageable);
 
             return ResponseEntity.ok(JSendResponse.success(searchedCompanies));

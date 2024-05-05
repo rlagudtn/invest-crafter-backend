@@ -88,6 +88,7 @@ public class CustomCompanyRepositoryImpl implements CustomCompanyRepository {
                 .select(company.count())
                 .from(company)
                 .innerJoin(company.keyIndicators, keyIndicator)
+                .where(company.name.contains(keyword).or(company.symbol.contains(keyword)))
                 .fetchJoin()
                 .fetchCount();
 
