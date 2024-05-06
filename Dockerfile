@@ -5,5 +5,7 @@ FROM openjdk:17-jdk-slim
 ARG JAR_FILE=/build/libs/invest-crafter-0.0.1-SNAPSHOT.jar
 COPY ${JAR_FILE} app.jar
 
-# 컨테이너 시작 시 실행할 명령어
-ENTRYPOINT ["java","-jar","/app.jar"]
+# wait-for-it.sh
+RUN apt-get update && apt-get install -y bash
+COPY wait-for-it.sh wait-for-it.sh
+RUN chmod +x wait-for-it.sh
