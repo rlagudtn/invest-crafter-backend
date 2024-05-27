@@ -14,7 +14,7 @@ public class CashFlowStatementDto {
     private Long financingActivitiesCashFlow;
     private Long freeCashFlow;
     private Long dividendsPaid;
-    private Long totalEquity;
+//    private Long totalEquity;
     private String url;
 
     public CashFlowStatementDto(CashFlowStatement cashFlowStatement) {
@@ -25,7 +25,7 @@ public class CashFlowStatementDto {
         this.financingActivitiesCashFlow = cashFlowStatement.getFinancingActivitiesCashFlow();
         this.freeCashFlow = cashFlowStatement.getFreeCashFlow();
         this.dividendsPaid = cashFlowStatement.getDividendsPaid();
-        this.totalEquity = cashFlowStatement.getTotalEquity();
+//        this.totalEquity = cashFlowStatement.getTotalEquity();
         this.url = cashFlowStatement.getUrl();
     }
 }

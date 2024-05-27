@@ -97,14 +97,13 @@ public class CustomCompanyRepositoryImpl implements CustomCompanyRepository {
 
     @Override
     public Optional<Company> findCompanyWithStatementsById(Long id) {
-        int LATEST=3;
+        int LATEST=5;
         Integer currentYear = LocalDate.now().getYear();
         Company found = queryFactory.selectFrom(company)
                 .leftJoin(company.balanceSheets, balanceSheet)
                 .leftJoin(company.incomeStatements, incomeStatement)
                 .leftJoin(company.cashFlowStatements, cashFlowStatement)
                 .where(company.id.eq(id))
-                .fetchJoin()
                 .fetchOne();
 
         // 데이터가 로드된 후, 자바에서 필터링과 정렬을 진행
